@@ -1,7 +1,6 @@
 package com.example.demo.apiRest;
 
 import com.example.demo.domain.*;
-import com.example.demo.infrastructure.WeaviateInsertService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +19,15 @@ public class USEnrichRestController {
     @Autowired
     private WeaviateService weaviateService;
     @Autowired
-    private WeaviateInsertService weaviateInsertService;
-    @Autowired
-    private LlamaAiService llamaAiService;
-    @Autowired
     private UserStoryEnrichService userStoryEnrichService;
 
     @GetMapping("api/v1/USHelper/detectDuplications")
     public ResponseEntity<?> detectDuplications(@RequestParam String userStory) {
         try {
             log.info("Detecting duplications for user story: " + userStory);
+            if(userStory == null || userStory.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("User story is empty.");
+            }
             List<Document> weaviateResponse = weaviateService.detectDuplicate(userStory);
             List<String> metadata = new ArrayList<>();
             for (Document document : weaviateResponse) {
@@ -47,19 +45,9 @@ public class USEnrichRestController {
     public ResponseEntity<?> enrichUserStory(@RequestParam String userStory) {
         try {
             final String aiResponse = userStoryEnrichService.combineResults(userStory);
-            return ResponseEntity.ok(aiResponse);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while generating message.");
-        }
-    }
-
-    @GetMapping("api/v1/USHelper/generateUS")
-    public ResponseEntity<?> generateUserStory(@RequestParam String userStory) {
-        try {
-            log.info("Generating for user story: " + userStory);
-            final LlamaResponse aiResponse = llamaAiService.generateUserStory(userStory);
+            if(userStory == null || userStory.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("User story is empty.");
+            }
             return ResponseEntity.ok(aiResponse);
         } catch (Exception e) {
             e.printStackTrace();

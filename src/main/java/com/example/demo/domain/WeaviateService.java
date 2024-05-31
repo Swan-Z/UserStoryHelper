@@ -8,8 +8,10 @@ import java.util.Optional;
 public interface WeaviateService {
 
     List<Document> detectDuplicate(String userStory);
-    
-    void insertData(List<Document> documents);
+
+    String insertData(Document document);
+
+    String insertData(List<Document> documents);
 
     Optional<Boolean> deleteData(List<String> keyList);
 

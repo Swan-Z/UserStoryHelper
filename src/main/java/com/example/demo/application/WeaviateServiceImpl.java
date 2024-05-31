@@ -24,7 +24,7 @@ public class WeaviateServiceImpl implements WeaviateService {
     public WeaviateServiceImpl(VectorStore vectorStore, WeaviateInsertService weaviateInsertService) {
         this.vectorStore = vectorStore;
         this.weaviateInsertService = weaviateInsertService;
-        
+
     }
     @Bean
     public VectorStore vectorStore(EmbeddingClient embeddingClient) {
@@ -44,36 +44,61 @@ public class WeaviateServiceImpl implements WeaviateService {
                         .withTopK(3));
         return results;
     }
-    
+
+
     @Override
-    public void insertData(List<Document> documents){
+    public String insertData(Document document) {
+        String res = "";
         try {
+            System.out.println("inserting data");
+            List<Document> documents = new ArrayList<>();
+            documents.add(document);
             vectorStore.add(documents);
-            System.out.println("Data inserted successfully.");
+            System.out.println("data inserted");
+            res = "Single document inserted successfully.";
         } catch (Exception e) {
-            System.err.println("Error while inserting data: " + e.getMessage());
+            res = "Error while inserting single document: " + e.getMessage();
             e.printStackTrace();
         }
+        return res;
     }
-    
+
+    @Override
+    public String insertData(List<Document> documents) {
+        String res = "";
+        try {
+            System.out.println("inserting data");
+            vectorStore.add(documents);
+            System.out.println("data inserted");
+            res = "Single document inserted successfully.";
+        } catch (Exception e) {
+            res = "Error while inserting single document: " + e.getMessage();
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
+
+
     @Override
     public Optional<Boolean> deleteData(List<String> uuidList){
         vectorStore.delete(uuidList);
         return vectorStore.delete(uuidList);
     }
-    
+
     @Override
     public void updateData(String key, Document document){
-        documents = weaviateInsertService.documents;
+        documents = weaviateInsertService.catchURL();
         for (Document value : documents) {
             if (key.equals(value.getMetadata().get("key"))) {
                 String id = value.getId();
                 deleteData(List.of(id));
-                ArrayList<Document> documentList = new ArrayList<>();
-                documentList.add(document);
-                insertData(documentList);
-                System.out.printf("Data with key '%s' found.%n", key);
-            } 
+                //   ArrayList<Document> documentList = new ArrayList<>();
+                //  documentList.add(document);
+                String msg = insertData(document);
+                System.out.println(msg);
+            }
         }
     }
 }

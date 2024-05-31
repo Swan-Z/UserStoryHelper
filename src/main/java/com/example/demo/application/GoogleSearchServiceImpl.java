@@ -27,7 +27,6 @@ public class GoogleSearchServiceImpl implements GoogleSearchService {
         phrases.add(jsonObject.getString("Frase 1"));
         phrases.add(jsonObject.getString("Frase 2"));
         phrases.add(jsonObject.getString("Frase 3"));
-        //System.out.println(phrases);
         return phrases;
     }
     @Override

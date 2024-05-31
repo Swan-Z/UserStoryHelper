@@ -1,8 +1,8 @@
 package com.example.demo.apiRest;
 
+import com.example.demo.domain.GPTResponse;
 import com.example.demo.domain.GoogleSearchService;
-import com.example.demo.domain.LlamaAiService;
-import com.example.demo.domain.LlamaResponse;
+import com.example.demo.domain.AiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +16,20 @@ import java.util.List;
 @RestController
 public class GoogleSearchRestController {
     
-    private final LlamaAiService llamaAiService;
+    private final AiService aiService;
     private final GoogleSearchService googleSearchService;
     @Autowired
-    public GoogleSearchRestController(LlamaAiService llamaAiService, GoogleSearchService googleSearchService) {
-        this.llamaAiService = llamaAiService;
+    public GoogleSearchRestController(AiService aiService, GoogleSearchService googleSearchService) {
+        this.aiService = aiService;
         this.googleSearchService = googleSearchService;
     }
 
     @GetMapping("api/v1/google/generateSearchResults")
-    public ResponseEntity<List<String>> generateSearchPhrase(@RequestParam String resume) throws IOException {
-        final LlamaResponse aiResponse = llamaAiService.generateSearchPhrase(resume);
-        final List<String> searchResultsResume = googleSearchService.search(aiResponse.getMessage());
+    public ResponseEntity<String> generateSearchPhrase(@RequestParam String resume) throws IOException {
+        final GPTResponse aiResponse = aiService.generateSearchPhrase(resume);
+        final List<String> searchResultsResume = googleSearchService.search(aiResponse.getResponse());
         
-        return ResponseEntity.status(HttpStatus.OK).body(searchResultsResume);
+        return ResponseEntity.status(HttpStatus.OK).body(searchResultsResume.toString());
     }
 
     
