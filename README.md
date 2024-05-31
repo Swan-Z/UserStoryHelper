@@ -24,6 +24,7 @@ ollama run moondream
 ```
 
 ## cookies
+Jira Api service: https://docs.atlassian.com/software/jira/docs/api/REST/7.6.1/#api/2/search-search
 
 JiraApiClient/cookies fetched in https://axinic.central.inditex.grp/jira/rest/api/2/search?jql=project=ICPRSITDEP%20AND%20issuetype%20=%20Historia&startAt=0&fields=key,description,summary,creator,project,updated,created&maxResults=1000
 ModelApiService/cookies fetched in https://iop-isai-producto-dqa-dev.cloud.inditex.com/docs#/LLM%20%2B%20RAG/ask_api_ask_post
