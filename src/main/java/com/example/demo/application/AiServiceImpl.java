@@ -73,22 +73,16 @@ public class AiServiceImpl implements AiService {
         AskRequest askRequest = createAskRequestGPT(prompt);
         return modelApiService.getDataFromApi(askRequest);
     }
-    /*Como experto en la elaboración de historias de usuario, tu tarea es escribir una historia de usuario 
-                y sus criterios de aceptación utilizando patrones en BDD (Behavior-Driven Development) para proyectos 
-                de desarrollo de software.
-                Te proporciono el siguiente contexto para la historia de usuario que necesito: %s, unas historias de usuario similares: %s,
-                y información relevante de búsqueda en Google relacionado con esta historia de usuario: %s. 
-                
-                Además, ajustar el formato de la historia de usuario generada como el siguiente ejemplo y asegúrate de incluir referencias a las fuentes de 
-                información al final del resultado, incluyendo el título y la URL de cada fuente utilizada: */
+    
     @Override
     public GPTResponse generateUSWithSimilarAndGoogleSearch(String resume, List<Document> userStorySimilar, String GoogleSearchResults) {
-        var prompt = String.format("""                        
-                As an expert in creating user stories, your task is to write a user story and its acceptance criteria using BDD (Behavior-Driven Development) patterns for software development projects.
-                 
-                 I will provide you with the following context for the required user story: %s, similar user stories: %s, and relevant Google search information related to this user story: %s.
-                 
-                 Additionally, adjust the format of the generated user story to match the following example and make sure to include references to the information sources at the end of the result, including the title and URL of each source used:
+        var prompt = String.format("""       
+                   Como experto en la elaboración de historias de usuario, tu tarea es escribir una historia de usuario
+                   y sus criterios de aceptación utilizando patrones en BDD (Behavior-Driven Development) para proyectos de desarrollo de software.
+                   Te proporciono el siguiente contexto para la historia de usuario que necesito: %s, unas historias de usuario similares: %s,
+                   y información relevante de búsqueda en Google relacionado con esta historia de usuario: %s.               
+                   Además, ajustar el formato de la historia de usuario generada como el siguiente ejemplo y asegúrate de incluir referencias a las fuentes de
+                   información al final del resultado, incluyendo el título y la URL de cada fuente utilizada:             
                       *AS* a SITDEP user
                         
                         *I WANT* to be able to see the weight of the sales of my department (hierarchical level) that have promotion or not.
@@ -124,9 +118,12 @@ public class AiServiceImpl implements AiService {
     @Override
     public GPTResponse generateSearchPhrase(String userStory) {
         var prompt = String.format("""
-                Create three search phrases in English based on this user story %s to use on Google for relevant information and relational data. 
-                The responses should be delivered in JSON format following this structure: {"Phrase 1":.., "Phrase 2:"..., "Phrase 3:"...}. 
-                Ensure that the search phrases are specific and relevant to obtain information that can improve the user story.
+             Crea tres frases de búsqueda en español basadas en esta historia de usuario %s
+             para utilizarlas en Google en busca de información relevante y datos relacionales.
+             Las respuestas deben entregarse en formato JSON siguiendo esta estructura:
+             {"Frase 1":.., "Frase 2:"..., "Frase 3:"...}. Asegúrate de que las frases de
+             búsqueda sean específicas y relevantes para obtener información que pueda mejorar
+             la historia de usuario.
               """, userStory);
 
         AskRequest askRequest = createAskRequestGPT(prompt);
@@ -139,9 +136,10 @@ public class AiServiceImpl implements AiService {
         AskRequest askRequest = new AskRequest();
         askRequest.setQuery(query);
         askRequest.setHistory(new ArrayList<>());
-        askRequest.setSystemPrompt("You are an AI support assistant whose main goal is to help another human. You are friendly, concise, and thorough.");
-        //askRequest.setUserPrompt("Ignore the original language of the search results section when providing your response. The response must be in the same language as this latest user message.");
-        askRequest.setModel("gpt-35-turbo-16k");
+        askRequest.setSystemPrompt("Eres un agente asistente de soporte de inteligencia artificial cuyo objetivo principal es ayudar a otro humano. Eres amigable, conciso y completo.");
+        askRequest.setUserPrompt("Ignora el idioma original de la sección de resultados de búsqueda al proporcionar tu respuesta. La respuesta debe estar en el mismo idioma que este último mensaje del usuario");
+        //askRequest.setModel("gpt-35-turbo-16k");
+        askRequest.setModel("gpt-4-32k");
         askRequest.setTemperature(0.7f);
         return askRequest;
     }
