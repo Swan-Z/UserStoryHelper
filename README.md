@@ -1,6 +1,6 @@
 # com.inditex.shiwanzext
 
-Shiwan's TFG project utilizes a RAG (Retrieval-Augmented Generation) model to develop a backend service designed to assist Product Owners in efficiently creating user stories. 
+Utilize a RAG (Retrieval-Augmented Generation) model to develop a backend service designed to assist Product Owners in efficiently creating user stories. 
 By using vector search with Weaviate, the project combines similar user stories, enabling the LLM (Language Model) to generate comprehensive and complete responses. 
 Additionally, the system can integrate relevant search results from Google about the user story's topic, enhancing the precision of the generated responses.
 
